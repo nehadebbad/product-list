@@ -8,7 +8,7 @@ const App = () => {
   const [sortAsc, setSortAsc] = useState(true);
 
   useEffect(() => {
-    fetch('products.json')
+    fetch('http://localhost:3001/api/products')
       .then((res) => res.json())
       .then((data) => {
         console.log('Loaded products:', data);

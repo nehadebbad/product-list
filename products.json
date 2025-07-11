@@ -37,7 +37,7 @@
   {
     "id": 6,
     "name": "Standing Desk",
-    "price": 250.00,
+    "price": 250,
     "description": "Ergonomic standing desk for comfort.",
     "imageUrl": "./images/desk.jpg"
   },
