@@ -8,7 +8,7 @@ const App = () => {
   const [sortAsc, setSortAsc] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/products')
+    fetch(import.meta.env.VITE_API_URL)
       .then((res) => res.json())
       .then((data) => {
         console.log('Loaded products:', data);
