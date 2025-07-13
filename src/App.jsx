@@ -6,15 +6,24 @@ const App = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortAsc, setSortAsc] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     fetch(import.meta.env.VITE_API_URL)
-      .then((res) => res.json())
+      .then((res) => {
+        if(!res) throw new Error('Error');
+        res.json();
+      })
       .then((data) => {
-        console.log('Loaded products:', data);
         setProducts(data);
         setFilteredProducts(data);
-      });
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(error.message);
+        setLoading(false);
+      })
   }, []);
 
   useEffect(() => {
