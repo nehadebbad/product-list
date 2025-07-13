@@ -12,7 +12,7 @@ const App = () => {
   useEffect(() => {
     fetch(import.meta.env.VITE_API_URL)
       .then((res) => {
-        if(!res) throw new Error('Error');
+        if (!res) throw new Error('Error');
         return res.json();
       })
       .then((data) => {
@@ -32,6 +32,7 @@ const App = () => {
       product.description.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredProducts(filtered);
+    setCurrentPage(1); // to search products from the entire product list
   }, [searchTerm, products]);
 
   const toggleSort = () => {
@@ -55,6 +56,13 @@ const App = () => {
       ).toFixed(2)
       : 0;
 
+  const itemsPerPage = 5;
+  const [currentPage, setCurrentPage] = useState(1);
+  const paginatedItems = filteredProducts.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   return (
     <div className="app">
       <header>
@@ -74,7 +82,7 @@ const App = () => {
 
       <main>
         <div className="product-grid">
-          {filteredProducts.map((product) => (
+          {paginatedItems.map((product) => (
             <div className="product-card" key={product.id}>
               <img src={product.imageUrl} alt={product.name} />
               <h2>{product.name}</h2>
@@ -82,6 +90,21 @@ const App = () => {
               <strong>${product.price.toFixed(2)}</strong>
             </div>
           ))}
+        </div>
+        <div className="pagination">
+          <button
+            onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+            disabled={currentPage === 1}
+          >
+            Prev
+          </button>
+          <span>Page {currentPage}</span>
+          <button
+            onClick={() => setCurrentPage((p) => p + 1)}
+            disabled={currentPage * itemsPerPage >= filteredProducts.length}
+          >
+            Next
+          </button>
         </div>
       </main>
 
