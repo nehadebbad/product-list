@@ -13,7 +13,7 @@ const App = () => {
     fetch(import.meta.env.VITE_API_URL)
       .then((res) => {
         if(!res) throw new Error('Error');
-        res.json();
+        return res.json();
       })
       .then((data) => {
         setProducts(data);
