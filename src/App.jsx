@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
+import useDebounce from './hooks/useDebounce';
 
 const App = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
   const [inputValue, setInputValue] = useState('');
   const [sortAsc, setSortAsc] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+
+  const debouncedSearchTerm = useDebounce(inputValue);
 
   useEffect(() => {
     fetch(import.meta.env.VITE_API_URL)
@@ -29,21 +31,12 @@ const App = () => {
 
   useEffect(() => {
     const filtered = products.filter((product) =>
-      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.description.toLowerCase().includes(searchTerm.toLowerCase())
+      product.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+      product.description.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
     );
     setFilteredProducts(filtered);
     setCurrentPage(1); // to search products from the entire product list
-  }, [searchTerm, products]);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setSearchTerm(inputValue);
-    }, 300);
-
-    return () => clearTimeout(timeout);
-  }, [inputValue]); // Debounce search term
-
+  }, [debouncedSearchTerm, products]);
 
   const toggleSort = () => {
     const sorted = [...filteredProducts].sort((a, b) => {
