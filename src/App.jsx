@@ -5,6 +5,7 @@ const App = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [inputValue, setInputValue] = useState('');
   const [sortAsc, setSortAsc] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -34,6 +35,15 @@ const App = () => {
     setFilteredProducts(filtered);
     setCurrentPage(1); // to search products from the entire product list
   }, [searchTerm, products]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setSearchTerm(inputValue);
+    }, 300);
+
+    return () => clearTimeout(timeout);
+  }, [inputValue]); // Debounce search term
+
 
   const toggleSort = () => {
     const sorted = [...filteredProducts].sort((a, b) => {
@@ -71,8 +81,8 @@ const App = () => {
           <input
             type="text"
             placeholder="Search products..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
           />
           <button onClick={toggleSort}>
             Sort by Price ({sortAsc ? 'Asc' : 'Desc'})
