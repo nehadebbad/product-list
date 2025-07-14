@@ -13,6 +13,7 @@ A simple React + Vite app that displays a list of products with filtering, sorti
 - Responsive layout with images
 - Unit tested with Vitest + Testing Library
 - Frontend deployed via GitHub Pages
+- Backend deployed via render
 
 ---
 
